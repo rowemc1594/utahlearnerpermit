@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Utah Permit Prep</title>
+<meta name="theme-color" content="#0b5d3b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Permit Prep">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{
+  --bg:#eef0ee; --card:#ffffff; --text:#1c2220; --muted:#5a6560; --line:#d6dbd8;
+  --sign:#0b5d3b; --sign-text:#ffffff; --yellow:#f6c400; --yellow-text:#1c1a10;
+  --good:#17703a; --good-bg:#e1f3e7; --bad:#b3261e; --bad-bg:#fbe7e5;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141816; --card:#1e2421; --text:#eef2ef; --muted:#a2aea7; --line:#333d38;
+    --sign:#0e7048; --sign-text:#ffffff; --yellow:#f6c400; --yellow-text:#1c1a10;
+    --good:#6fd394; --good-bg:#17301f; --bad:#ff9a92; --bad-bg:#3a1c1a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141816; --card:#1e2421; --text:#eef2ef; --muted:#a2aea7; --line:#333d38;
+  --sign:#0e7048; --sign-text:#ffffff; --yellow:#f6c400; --yellow-text:#1c1a10;
+  --good:#6fd394; --good-bg:#17301f; --bad:#ff9a92; --bad-bg:#3a1c1a;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:18px; line-height:1.45; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px 40px}
+h1,h2,.display{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;font-weight:700;letter-spacing:.01em;margin:0}
+
+/* Highway guide sign header */
+.sign{
+  background:var(--sign); color:var(--sign-text);
+  border:3px solid #fff; outline:3px solid var(--sign);
+  border-radius:12px; padding:16px 18px 18px; margin:6px 3px 18px;
+}
+.sign h1{font-size:40px;line-height:1.02}
+.sign p{margin:6px 0 0;font-size:17px;opacity:.95}
+.sign .best{margin-top:12px;font-weight:600;font-size:16px}
+
+h2{font-size:26px;margin:22px 0 10px}
+.btn{
+  display:block;width:100%;text-align:left;cursor:pointer;
+  font:inherit;color:var(--text);background:var(--card);
+  border:2px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 10px;
+  min-height:56px; -webkit-tap-highlight-color:transparent;
+}
+.btn:active{transform:scale(.99)}
+.btn:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.btn .t{font-weight:600;font-size:19px;display:block}
+.btn .s{color:var(--muted);font-size:15px;display:block;margin-top:1px}
+.primary{background:var(--yellow);color:var(--yellow-text);border-color:var(--yellow)}
+.primary .s{color:var(--yellow-text);opacity:.8}
+.center{text-align:center}
+.lbl{font-weight:600;margin:0 0 8px}
+.chips{display:flex;gap:8px;margin:0 0 12px}
+.chip{flex:1;min-height:52px;font:inherit;font-weight:600;font-size:19px;color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.chip[aria-pressed="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-text)}
+.chip:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.note{color:var(--muted);font-size:14.5px;margin-top:22px}
+
+/* Quiz */
+.topbar{display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--muted);font-size:16px;margin-bottom:8px}
+.quit{background:none;border:0;color:var(--muted);font:inherit;text-decoration:underline;padding:8px 0;cursor:pointer}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;background:var(--sign);border-radius:99px;transition:width .25s}
+.cat{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.q{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;font-weight:600;font-size:28px;line-height:1.15;margin:0 0 16px}
+.opt{display:flex;gap:12px;align-items:flex-start}
+.opt .l{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:600;font-size:15px;margin-top:1px}
+.opt.right{background:var(--good-bg);border-color:var(--good)}
+.opt.right .l{background:var(--good);border-color:var(--good);color:var(--card)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.opt.wrong .l{background:var(--bad);border-color:var(--bad);color:var(--card)}
+.opt:disabled{cursor:default}
+.explain{background:var(--card);border-left:6px solid var(--sign);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:17px}
+.explain b{display:block;margin-bottom:2px}
+.explain.no{border-left-color:var(--bad)}
+.explain.yes{border-left-color:var(--good)}
+
+/* Results */
+.score{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;font-weight:700;font-size:84px;line-height:1;margin:10px 0 0}
+.verdict{display:inline-block;padding:6px 14px;border-radius:99px;font-weight:600;margin:10px 0 18px}
+.verdict.pass{background:var(--good-bg);color:var(--good)}
+.verdict.fail{background:var(--bad-bg);color:var(--bad)}
+.miss{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.miss .mq{font-weight:600}
+.miss .ma{color:var(--good);margin-top:4px;font-size:16px}
+.miss .me{color:var(--muted);margin-top:4px;font-size:15.5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+// ---------- Question bank ----------
+var Q = [
+ {c:"Alcohol and laws", q:"What is the legal blood alcohol limit for drivers 21 and older in Utah?", o:["0.02%","0.05%","0.08%","0.10%"], a:1, e:"Utah lowered its limit to 0.05% in 2018, the lowest in the country."},
+ {c:"Alcohol and laws", q:"A driver under 21 in Utah is subject to which alcohol rule?", o:["Same as adults: 0.05%","0.02% is allowed","Zero tolerance: any measurable alcohol","Alcohol is allowed with a licensed adult in the car"], a:2, e:"Drivers under 21 face zero tolerance. Any measurable alcohol can mean losing your license."},
+ {c:"Alcohol and laws", q:"By driving on Utah roads, you have given your consent to:", o:["Random vehicle searches","A chemical test of your breath, blood, or urine if lawfully requested","Speed cameras only","Nothing, tests are always optional"], a:1, e:"This is called implied consent. Refusing a chemical test brings its own penalties."},
+
+ {c:"Permit and license rules", q:"What is the minimum age to get a learner permit in Utah?", o:["14","15","16","17"], a:1, e:"You can apply for a learner permit at 15."},
+ {c:"Permit and license rules", q:"If you are under 18, how much supervised driving must you log before getting a license?", o:["20 hours, 5 at night","30 hours, 5 at night","40 hours, 10 at night","50 hours, 15 at night"], a:2, e:"Utah requires 40 hours of supervised driving, including 10 hours at night."},
+ {c:"Permit and license rules", q:"If you are under 18, how long must you hold your learner permit before you can take the driving test?", o:["30 days","3 months","6 months","1 year"], a:2, e:"Drivers under 18 must hold the learner permit for at least 6 months."},
+
+ {c:"Signs and signals", q:"What should you do at a flashing red light?", o:["Slow down and proceed","Stop, then go when it is safe, like a stop sign","Speed up to clear the intersection","Yield only if cars are coming"], a:1, e:"Treat a flashing red light exactly like a stop sign: come to a full stop, then go when it is safe."},
+ {c:"Signs and signals", q:"What does a flashing yellow light mean?", o:["Stop completely","The road is closed","Slow down and proceed with caution","Traffic from the other way must stop"], a:2, e:"A flashing yellow light is a warning. Slow down and be ready to stop if needed."},
+ {c:"Signs and signals", q:"A yellow, diamond-shaped sign is a:", o:["Regulatory sign","Warning sign","Guide sign","Construction-only sign"], a:1, e:"Diamond signs warn you about conditions ahead, like curves, crossings, or slippery roads."},
+ {c:"Signs and signals", q:"A sideways pennant-shaped (triangle) sign on the left side of the road means:", o:["Yield ahead","No passing zone","School zone","Railroad crossing"], a:1, e:"The pennant marks the start of a no-passing zone."},
+ {c:"Signs and signals", q:"A solid yellow line on your side of the center line means:", o:["You may pass if the road is clear","You may not pass","The lane is for turning only","Passing is allowed with a signal"], a:1, e:"A solid yellow line on your side means no passing. A broken yellow line on your side means passing is allowed when safe."},
+ {c:"Signs and signals", q:"You are at a red light and want to turn right. You may turn if:", o:["The road is empty, no stop needed","You stop fully, yield to traffic and pedestrians, and no sign prohibits it","You honk first","You are in the left lane"], a:1, e:"Right on red is allowed after a full stop and yielding, unless a sign says otherwise."},
+ {c:"Signs and signals", q:"You are turning left on a green circle (no arrow) light. You must:", o:["Go first, you have the green","Yield to oncoming traffic and pedestrians","Stop and wait for an arrow","Speed up before oncoming cars arrive"], a:1, e:"A green ball lets you go, but when turning left you must yield to oncoming traffic."},
+
+ {c:"Right of way", q:"Two cars reach a four-way stop at the same time. Who goes first?", o:["The faster car","The car on the left","The car on the right","The larger vehicle"], a:2, e:"When you arrive at the same time, yield to the driver on your right."},
+ {c:"Right of way", q:"A pedestrian is in a crosswalk in front of you. You must:", o:["Honk and go around","Stop and yield until they have crossed","Slow down and keep going","Go if they are on the other half of the road"], a:1, e:"Always stop for pedestrians in a crosswalk."},
+ {c:"Right of way", q:"When entering a roundabout you must:", o:["Go first if you are faster","Yield to traffic already in the roundabout","Stop in the middle","Enter from the left side"], a:1, e:"Traffic already in the roundabout has the right of way. Yield, then enter when there is a gap."},
+ {c:"Right of way", q:"An emergency vehicle with siren and flashing lights approaches from behind. You should:", o:["Speed up to get out of the way","Stop immediately in your lane","Pull to the right edge of the road and stop","Pull to the left"], a:2, e:"Pull to the right edge and stop until it passes. If you are in an intersection, clear it first, then pull over."},
+ {c:"Right of way", q:"A school bus ahead has its red lights flashing on an undivided road. You must:", o:["Slow down and pass carefully","Pass on the right","Stop and wait until the lights stop flashing and the bus moves","Honk"], a:2, e:"Stop for a school bus with flashing red lights, in both directions on an undivided road."},
+ {c:"Right of way", q:"What does Utah's Move Over law ask you to do when a stopped emergency vehicle has flashing lights?", o:["Honk twice","Slow down and, if safe, move over a lane","Speed up to pass quickly","Stop behind it"], a:1, e:"Slow down and move over a lane if you can do it safely. This protects people working on the roadside."},
+
+ {c:"Speed and safe driving", q:"What is the speed limit in a school zone when children are present?", o:["15 mph","20 mph","25 mph","30 mph"], a:1, e:"The school zone limit is 20 mph when children are present or the lights are flashing."},
+ {c:"Speed and safe driving", q:"Unless otherwise posted, the speed limit in a residential district is:", o:["20 mph","25 mph","35 mph","45 mph"], a:1, e:"Residential and business districts are 25 mph unless signs say otherwise."},
+ {c:"Speed and safe driving", q:"In good conditions, a safe minimum following distance is at least:", o:["1 second","2 seconds","One car length","Whatever feels comfortable"], a:1, e:"Keep at least a 2-second gap, and add more time in rain, snow, fog, or heavy traffic."},
+ {c:"Speed and safe driving", q:"Using a hand-held phone while driving in Utah is:", o:["Legal for calls only","Legal at red lights","Prohibited, hands-free use is the safe option","Legal if you are under 18"], a:2, e:"Utah bans hand-held phone use while driving. Best habit: put the phone away until you park."},
+ {c:"Speed and safe driving", q:"Who must wear a seat belt in a car in Utah?", o:["Only the driver","Driver and front passenger","Everyone in the vehicle","Anyone under 18"], a:2, e:"All occupants must be buckled up."},
+ {c:"Speed and safe driving", q:"In Utah, children under 8 must ride in a child restraint unless they are at least how tall?", o:["48 inches","52 inches","57 inches","60 inches"], a:2, e:"Under age 8, kids need a child restraint unless they are 57 inches tall or more."},
+ {c:"Speed and safe driving", q:"Before changing lanes, you should:", o:["Only check the mirrors","Check mirrors, signal, and look over your shoulder to check blind spots","Signal and move quickly","Tap the horn"], a:1, e:"Mirrors do not show everything. Always glance over your shoulder at the blind spot."},
+ {c:"Speed and safe driving", q:"You start to hydroplane on wet road. You should:", o:["Brake hard","Ease off the gas, hold the wheel steady, and avoid hard braking","Accelerate","Turn sharply"], a:1, e:"Slowly ease off the gas and steer straight until the tires grip again."},
+ {c:"Speed and safe driving", q:"Which is a place where you should NOT pass another vehicle?", o:["On a straight road with a broken center line","Near the crest of a hill or on a curve where you cannot see ahead","On a multi-lane road with space on the left","When the car ahead is going slow on a clear road"], a:1, e:"Never pass where you cannot see far enough ahead, such as hills and curves, or near intersections and railroad crossings."},
+
+ {c:"Lights and parking", q:"You must dim your high beams for oncoming traffic within about:", o:["100 feet","200 feet","500 feet","1,000 feet"], a:2, e:"Dim your high beams within 500 feet of an oncoming vehicle, and within 200 feet when following another vehicle."},
+ {c:"Lights and parking", q:"When should you turn your headlights on?", o:["Only after it is fully dark","From half an hour after sunset until half an hour before sunrise, and any time visibility is poor","Only in the rain","Only on highways"], a:1, e:"Use headlights at night and any time you cannot see well, such as fog or heavy rain or snow."},
+ {c:"Lights and parking", q:"You may not park within how many feet of a fire hydrant?", o:["5 feet","10 feet","15 feet","30 feet"], a:2, e:"Stay at least 15 feet away from a fire hydrant."},
+ {c:"Lights and parking", q:"How far from the nearest rail should you stop when stopping for a train at a crossing?", o:["At least 5 feet","At least 15 feet","At least 50 feet","Right at the tracks"], a:1, e:"Stop between 15 and 50 feet from the nearest rail. Never try to beat a train."}
+];
+
+// ---------- State ----------
+var KEY = "utahPermitPrep.v1";
+var store = {best:0, missed:[], taken:0, count:10};
+try { var s = localStorage.getItem(KEY); if (s) { var p = JSON.parse(s); store.best = p.best||0; store.missed = p.missed||[]; store.taken = p.taken||0; if (p.count !== undefined) store.count = p.count; } } catch (e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+var app = document.getElementById("app");
+var run = null; // {items:[{id,order}], i, right:[], wrong:[], answered:false, label}
+
+function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function cats(){ var m={}; Q.forEach(function(x){ m[x.c]=(m[x.c]||0)+1; }); return m; }
+
+// ---------- Screens ----------
+function home(){
+  run = null;
+  var missedN = store.missed.length;
+  var html = '<div class="sign"><h1>Utah Permit Prep</h1><p>Practice questions for the learner permit knowledge test.</p>' +
+    (store.taken ? '<div class="best">Best score: ' + store.best + '%</div>' : '') + '</div>';
+  html += '<div class="lbl">How many questions?</div><div class="chips">';
+  [10,20,30,0].forEach(function(n){
+    html += '<button class="chip" data-n="' + n + '" aria-pressed="' + (store.count===n) + '" onclick="setCount(' + n + ')">' + (n===0 ? 'All ' + Q.length : n) + '</button>';
+  });
+  html += '</div>';
+  html += '<button class="btn primary" onclick="start(\'random\')"><span class="t">Start quiz</span><span class="s" id="startsub">' + (store.count || Q.length) + ' random questions, 80% to pass</span></button>';
+  if (missedN) html += '<button class="btn" onclick="start(\'missed\')"><span class="t">Drill my missed questions</span><span class="s">' + missedN + ' to review</span></button>';
+  html += '<h2>By topic</h2>';
+  var c = cats();
+  Object.keys(c).forEach(function(k){
+    html += '<button class="btn" data-cat="' + esc(k) + '" onclick="start(\'cat\', this.dataset.cat)"><span class="t">' + esc(k) + '</span><span class="s">' + c[k] + ' questions</span></button>';
+  });
+  var standalone = window.navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone) html += '<p class="note"><b>Install it:</b> tap the Share button, then Add to Home Screen. It will open like an app and work without internet.</p>';
+  html += '<p class="note">This is a practice tool, not the official test. Read the official Utah Driver Handbook from the Driver License Division (dld.utah.gov) and check it for the latest rules.</p>';
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function setCount(n){
+  store.count = n; save();
+  document.querySelectorAll(".chip").forEach(function(b){ b.setAttribute("aria-pressed", String(+b.dataset.n === n)); });
+  var s = document.getElementById("startsub"); if (s) s.textContent = (n || Q.length) + " random questions, 80% to pass";
+}
+
+function start(mode, cat){
+  var ids = Q.map(function(_,i){return i;});
+  var label = "Quiz";
+  var n = store.count || Q.length;
+  if (mode === "random"){ ids = shuffle(ids).slice(0,n); label = "Quiz"; }
+  else if (mode === "missed"){ ids = shuffle(store.missed.filter(function(i){return i<Q.length;})).slice(0,n); label = "Missed questions"; }
+  else if (mode === "cat"){ ids = shuffle(ids.filter(function(i){return Q[i].c===cat;})).slice(0,n); label = cat; }
+  if (!ids.length){ home(); return; }
+  run = {items: ids.map(function(id){ return {id:id, order:shuffle([0,1,2,3])}; }), i:0, right:[], wrong:[], answered:false, label:label, mode:mode};
+  question();
+}
+
+function question(){
+  var it = run.items[run.i], q = Q[it.id], total = run.items.length;
+  var html = '<div class="topbar"><span>Question ' + (run.i+1) + ' of ' + total + '</span><button class="quit" onclick="home()">Quit</button></div>';
+  html += '<div class="bar"><i style="width:' + (run.i/total*100) + '%"></i></div>';
+  html += '<div class="cat">' + esc(q.c) + '</div><h2 class="q">' + esc(q.q) + '</h2>';
+  it.order.forEach(function(oi, pos){
+    html += '<button class="btn opt" data-oi="' + oi + '" onclick="answer(' + oi + ')"><span class="l">' + "ABCD"[pos] + '</span><span>' + esc(q.o[oi]) + '</span></button>';
+  });
+  html += '<div id="fb"></div>';
+  run.answered = false;
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function answer(oi){
+  if (run.answered) return;
+  run.answered = true;
+  var it = run.items[run.i], q = Q[it.id], ok = (oi === q.a);
+  (ok ? run.right : run.wrong).push(it.id);
+  var btns = app.querySelectorAll(".opt");
+  btns.forEach(function(b){
+    var v = +b.dataset.oi; b.disabled = true;
+    if (v === q.a) b.classList.add("right");
+    else if (v === oi) b.classList.add("wrong");
+  });
+  var last = run.i === run.items.length - 1;
+  document.getElementById("fb").innerHTML =
+    '<div class="explain ' + (ok?'yes':'no') + '"><b>' + (ok ? 'Correct' : 'Not quite') + '</b>' + esc(q.e) + '</div>' +
+    '<button class="btn primary center" onclick="next()"><span class="t">' + (last ? 'See results' : 'Next question') + '</span></button>';
+  var nb = document.querySelector("#fb .btn"); if (nb) nb.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function next(){
+  if (run.i < run.items.length - 1){ run.i++; question(); } else { results(); }
+}
+
+function results(){
+  var total = run.items.length, n = run.right.length, pct = Math.round(n/total*100), pass = pct >= 80;
+  // update missed list: add new misses, clear ones answered right
+  var set = {}; store.missed.forEach(function(i){ set[i]=1; });
+  run.wrong.forEach(function(i){ set[i]=1; });
+  run.right.forEach(function(i){ delete set[i]; });
+  store.missed = Object.keys(set).map(Number);
+  store.taken++; if (run.mode !== "missed" && pct > store.best) store.best = pct;
+  save();
+
+  var html = '<div class="sign"><h1>' + esc(run.label) + ' complete</h1></div>';
+  html += '<div class="center"><div class="score">' + pct + '%</div><div>' + n + ' of ' + total + ' correct</div>' +
+          '<div class="verdict ' + (pass?'pass':'fail') + '">' + (pass ? 'Passing score (80% or more)' : 'Below the 80% passing mark') + '</div></div>';
+  if (run.wrong.length){
+    html += '<h2>Review what you missed</h2>';
+    run.wrong.forEach(function(id){
+      var q = Q[id];
+      html += '<div class="miss"><div class="mq">' + esc(q.q) + '</div><div class="ma">Answer: ' + esc(q.o[q.a]) + '</div><div class="me">' + esc(q.e) + '</div></div>';
+    });
+  } else {
+    html += '<p class="center">No misses. Nice work.</p>';
+  }
+  html += '<button class="btn primary" onclick="start(\'' + (run.mode==="cat" ? 'cat\', ' + JSON.stringify(run.label).replace(/"/g,"&quot;") : run.mode + '\'') + ')"><span class="t">Try again</span></button>';
+  if (store.missed.length && run.mode !== "missed") html += '<button class="btn" onclick="start(\'missed\')"><span class="t">Drill my missed questions</span><span class="s">' + store.missed.length + ' to review</span></button>';
+  html += '<button class="btn" onclick="home()"><span class="t">Back to start</span></button>';
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+home();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+}
+</script>
+</body>
+</html>
