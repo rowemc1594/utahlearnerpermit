@@ -1,6 +1,6 @@
 // Serves the app from cache so it works offline, and quietly refreshes the cache
 // whenever there is a connection. Changes show up the next time the app is opened.
-const CACHE = "permit-prep-v1";
+const CACHE = "permit-prep-v2";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"
